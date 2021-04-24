@@ -1,10 +1,13 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
-	"time"
 )
+
+
+
+
+
 
 //Message sent to us by the flutter web client
 type Message struct {
@@ -16,6 +19,7 @@ type Message struct {
 type TokenData struct {
 	Token      string `json:"token"`
 }
+
 
 //SetMiddlewareJSON header json
 func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
@@ -58,45 +62,4 @@ func ValidateMessage(data []byte) (Message, error) {
 
 	
 	return msg, nil
-}
-
-//func ValidateLoginToken(tokenData []byte)(TokenData, error){
-//	 var tokenMsg TokenData
-//	 var tokenMsgLen = 32
-//		var err = "Token appears to be invalide"
-//	 if  len(tokenData) != tokenMsgLen{
-//		panic(err)
-		//return
-//	 }
-//	
-//	return tokenMsg, nil
-//}
-
-//DoEvery auto call createToken func every second
-func DoEvery(d time.Duration, f func(time.Time)){
-
-	for x := range time.Tick(d){
-		f(x)
-	}
-}
-
-
-
-func HelloWorld(t time.Time){
-	fmt.Println("%v: Hello world\n ",t)
-}
-
-
-
-func dosomething( s string){
-	fmt.Println("doing something 2" , s)
-}
-
-
-func StartPolling2(){
-	for{
-
-		<-time.After(2*time.Second)
-		go dosomething("polling from 2")
-	}
 }

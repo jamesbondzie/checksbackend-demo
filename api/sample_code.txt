@@ -292,3 +292,48 @@ func (s *Server)CreateDB(DbUser, DbPassword, DbPort, DbHost,DbName string) {
 //	}
 
  }
+
+
+
+#################################################################################
+
+//func ValidateLoginToken(tokenData []byte)(TokenData, error){
+//	 var tokenMsg TokenData
+//	 var tokenMsgLen = 32
+//		var err = "Token appears to be invalide"
+//	 if  len(tokenData) != tokenMsgLen{
+//		panic(err)
+		//return
+//	 }
+//	
+//	return tokenMsg, nil
+//}
+
+//DoEvery auto call createToken func every second
+func DoEvery(d time.Duration, f func(time.Time)){
+
+	for x := range time.Tick(d){
+		f(x)
+	}
+}
+
+
+
+func HelloWorld(t time.Time){
+	fmt.Println("%v: Hello world\n ",t)
+}
+
+
+
+func dosomething( s string){
+	fmt.Println("doing something 2" , s)
+}
+
+
+func StartPolling2(){
+	for{
+
+		<-time.After(2*time.Second)
+		go dosomething("polling from 2")
+	}
+}
