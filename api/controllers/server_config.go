@@ -73,22 +73,23 @@ func (s *Server) InitializeDB(DbUser, DbPassword, DbPort, DbHost, DbName string)
 
 //RunBackendResources function calls address and 
 //serves
-func (s *Server) RunBackendResources() {
+func (s *Server) RunBackendResources(addr string) {
 	
 	
 	var ip = os.Getenv("ADDR")
 	if ip == "" {
 		log.Fatal("$PORT must be set")
 	}
-	var  port = os.Getenv("PORT")
+	 port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
+		//port == "8080"
 	}
 	
 	if port == " " && ip == "" {
 
-		var ip = os.Getenv("ADDR")
-		var  port = os.Getenv("PORT")
+		var ip = "localhost"
+		  port = "8080"
 		
 		var  addr string  = ip + ":" + port
 		fmt.Printf("Listening on %s",addr)
@@ -99,7 +100,7 @@ func (s *Server) RunBackendResources() {
 }
 	
 	
-var  addr string  = ip + ":" + port
+//var  addr  = ip + ":" + port
 log.Fatal(http.ListenAndServe(addr, s.Router))
 
 }
