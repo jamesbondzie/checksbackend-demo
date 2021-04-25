@@ -1,1 +1,1 @@
-web: ./bin/checksbackend
+web: bin/checksbackend
