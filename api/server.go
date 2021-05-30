@@ -1,35 +1,38 @@
 package api
 
 import (
+	"fmt"
+	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"checksbackend/api/controllers"
+	"checksbackend/api/seed"
 )
 
-
-
-var s = controllers.Server{}
-
-//init function to;
-//Load .env.local variables
-//Connect redis server
-//Connect Postgres DB
+var server = controllers.Server{}
 
 func init() {
-	
-	LoadEnvVariables()
-	s.CreateDB(os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
-	s.InitializeDB(os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
-	//RedisServer()
-
-
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("sad .env file found")
+	}
 }
 
+func Run() {
 
-//Run function to call server
-func Run(){
-	
-	
-	
-	s.RunBackendResources(":8080")
+	var err error
+	err = godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error getting env, %v", err)
+	} else {
+		fmt.Println("We are getting the env values")
+	}
+
+	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
+
+	seed.Load(server.DB)
+
+	server.Run(":8080")
+
 }

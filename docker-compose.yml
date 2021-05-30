@@ -1,0 +1,59 @@
+version: '3'
+services:
+  app:
+    container_name: test_app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:8080 
+    restart: on-failure
+    environment:
+      PORT: 8080
+      DB_CONN: "postgres://user:password@db:5432/db?sslmode=disable"
+    volumes:
+      - api:/usr/src/app/
+    depends_on:
+      - db          
+    networks:
+      - checks
+
+
+  db:
+    image: postgres:latest
+    container_name: checks_db_postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}  
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST} 
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      - checks
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    networks:
+      - checks
+    restart: unless-stopped
+
+volumes:
+  api:
+  database_postgres:                  
+
+# Networks to be created to facilitate 
+#communication between containers
+networks:
+  checks:
+    driver: bridge

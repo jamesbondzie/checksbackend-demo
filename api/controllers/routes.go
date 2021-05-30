@@ -2,34 +2,25 @@ package controllers
 
 import "checksbackend/api/middlewares"
 
-
-
-func(s *Server)initializeRoutes(){
+func (s *Server) initializeRoutes() {
 
 	// Home Route
-	s.Router.HandleFunc("/home", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
+	s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
 
+	// Login Route
+	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
 
+	//Users routes
+	s.Router.HandleFunc("/users", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST")
+	s.Router.HandleFunc("/users", middlewares.SetMiddlewareJSON(s.GetUsers)).Methods("GET")
+	s.Router.HandleFunc("/users/{id}", middlewares.SetMiddlewareJSON(s.GetUser)).Methods("GET")
+	s.Router.HandleFunc("/users/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
+	s.Router.HandleFunc("/users/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteUser)).Methods("DELETE")
 
-	//WebsocketHandlers
-	s.Router.HandleFunc("/ws-web", middlewares.SetMiddlewareJSON(s.WebAppSocketHandlerLogin)).Methods("GET")
-	s.Router.HandleFunc("/ws-mobile", middlewares.SetMiddlewareJSON(wsHandlerMobileLogin)).Methods("GET")
-
-	
-	
-	//SignUp route
-	//s.Router.HandleFunc("/ws-registerNewUsersMobileClient", middlewares.SetMiddlewareJSON(s.RegisterNewUser)).Methods("POST")
-	
-	
-	
-	//Admin Create New Checkin Group route
-	//s.Router.HandleFunc("/admin-create-new-group", middlewares.SetMiddlewareJSON(s.CreateNewLocationGroup)).Methods("POST")
-
-	
-	
-	//http handler
-	s.Router.HandleFunc("/mobile-login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
-
-	
-	//s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.LoginTest)).Methods("POST")
+	//Posts routes
+	s.Router.HandleFunc("/posts", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
+	s.Router.HandleFunc("/posts", middlewares.SetMiddlewareJSON(s.GetPosts)).Methods("GET")
+	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")
+	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
+	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 }
