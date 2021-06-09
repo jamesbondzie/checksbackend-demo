@@ -1,5 +1,5 @@
 # Start from golang base image
-FROM golang:alpine as build
+FROM golang:alpine as builder
 
 # ENV GO111MODULE=on
 
